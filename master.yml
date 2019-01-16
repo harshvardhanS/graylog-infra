@@ -1,0 +1,30 @@
+# Pretask install python
+- hosts: all
+  become: true
+  gather_facts: false
+  pre_tasks:
+    - name: 'install python2'
+      raw: sudo apt-get -y install python
+
+- hosts: all
+  become: true
+  tasks:
+    - name: "Install requirement - {{ item }}"
+      apt:
+        name: "{{ item }}"
+        update_cache: true
+        state: present
+      with_items:
+        - openjdk-8-jre-headless
+
+    - name: ensure the jenkins apt repository key is installed
+      apt_key: url=https://pkg.jenkins.io/debian-stable/jenkins.io.key state=present
+
+    - name: ensure the repository is configured
+      apt_repository: repo='deb https://pkg.jenkins.io/debian-stable binary/' state=present
+
+    - name: ensure jenkins is installed
+      apt: name=jenkins update_cache=yes
+
+    - name: ensure jenkins is running
+      service: name=jenkins state=started
