@@ -11,6 +11,6 @@ amis = {
 vpc_cidr = "10.0.0.0/16"
 public_subnet_cidr = "10.0.0.0/24"
 private_subnet_cidr = "10.0.1.0/24"
-mongo-es-instance-type = "t2.micro"
+mongo-es-instance-type = "t2.medium"
 jenkins-instance-type = "t2.micro"
 graylog-instance-type = "t2.micro"
