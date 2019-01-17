@@ -1,3 +1,8 @@
+locals {
+    pub_subnets = ["${aws_subnet.terraform-graylog-pubsubnet.*.id}"]
+    priv_subnets = ["${aws_subnet.terraform-graylog-privsubnet.*.id}"]
+}
+
 # Define the route table
 resource "aws_route_table" "gl-public-rt" {
     vpc_id = "${aws_vpc.graylog_vpc.id}"
@@ -9,12 +14,6 @@ resource "aws_route_table" "gl-public-rt" {
     tags {
         Name = "gl-public-rt"
     }
-}
-
-# assign the route table to public subnet
-resource "aws_route_table_association" "public-rt-subnet-association" {
-        subnet_id = "${aws_subnet.pubsub_graylog.id}"
-        route_table_id = "${aws_route_table.gl-public-rt.id}"
 }
 
 # Define private route table
@@ -30,8 +29,16 @@ resource "aws_route_table" "gl-private-rt" {
     }
 }
 
-# assign private route table to private subnet
-resource "aws_route_table_association" "private-rt-subnet-association" {
-        subnet_id = "${aws_subnet.privsub_graylog.id}"
-        route_table_id = "${aws_route_table.gl-private-rt.id}"
+######### PUBLIC Subnet assiosation with rotute table    ######
+resource "aws_route_table_association" "public-assoc-1" {
+  count = "${var.subnet_count}"
+  subnet_id      = "${element(local.pub_subnets, count.index)}"
+  route_table_id = "${aws_route_table.gl-public-rt.id}"
+}
+
+######### PRIVATE Subnet assiosation with rotute table    ######
+resource "aws_route_table_association" "private-assoc-1" {
+  count = "${var.subnet_count}"
+  subnet_id      = "${element(local.priv_subnets, count.index)}"
+  route_table_id = "${aws_route_table.gl-private-rt.id}"
 }

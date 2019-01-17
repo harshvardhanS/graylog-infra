@@ -1,4 +1,4 @@
-# Define security group for public subnet
+# Define security group for Graylog
 resource "aws_security_group" "graylog-sg" {
     name = "graylog-sg"
     description = "Allow ssh and graylog port opening"
@@ -44,6 +44,7 @@ resource "aws_security_group" "graylog-sg" {
     }
 }
 
+# Define security group for Jenkins
 resource "aws_security_group" "jenkins-sg" {
     name = "jenkins-sg"
     description = "Allow ssh and jenkins port opening"
@@ -83,7 +84,7 @@ resource "aws_security_group" "jenkins-sg" {
     }
 }
 
-# Define security group for private subnet
+# Define security group for Mongo
 resource "aws_security_group" "mongo-sg" {
     name = "mongo-sg"
     description = "Allow traffic from public subnet to mongo"
@@ -92,25 +93,13 @@ resource "aws_security_group" "mongo-sg" {
         from_port = 27017
         to_port = 27017
         protocol = "tcp"
-        cidr_blocks = ["${var.public_subnet_cidr}"]
-    }
-    ingress {
-        from_port = 9200
-        to_port = 9200
-        protocol = "tcp"
-        cidr_blocks = ["${var.public_subnet_cidr}"]
-    }
-    ingress {
-        from_port = 9300
-        to_port = 9300
-        protocol = "tcp"
-        cidr_blocks = ["${var.public_subnet_cidr}"]
+        cidr_blocks = ["${var.vpc_cidr}"]
     }
     ingress {
         from_port = 22
         to_port = 22
         protocol = "tcp"
-        cidr_blocks = ["${var.public_subnet_cidr}"]
+        cidr_blocks = ["${var.vpc_cidr}"]
     }
     egress {
         from_port       = 0
@@ -121,5 +110,40 @@ resource "aws_security_group" "mongo-sg" {
     vpc_id = "${aws_vpc.graylog_vpc.id}"
     tags {
         Name = "mongo-sg"
+    }
+}
+
+# Define security group for Elasticsearch
+resource "aws_security_group" "elastic-sg" {
+    name = "elastic-sg"
+    description = "Allow traffic from public subnet to mongo"
+
+    ingress {
+        from_port = 9200
+        to_port = 9200
+        protocol = "tcp"
+        cidr_blocks = ["${var.vpc_cidr}"]
+    }
+    ingress {
+        from_port = 9300
+        to_port = 9300
+        protocol = "tcp"
+        cidr_blocks = ["${var.vpc_cidr}"]
+    }
+    ingress {
+        from_port = 22
+        to_port = 22
+        protocol = "tcp"
+        cidr_blocks = ["${var.vpc_cidr}"]
+    }
+    egress {
+        from_port       = 0
+        to_port         = 0
+        protocol        = "-1"
+        cidr_blocks     = ["0.0.0.0/0"]
+    }
+    vpc_id = "${aws_vpc.graylog_vpc.id}"
+    tags {
+        Name = "elastic-sg"
     }
 }
