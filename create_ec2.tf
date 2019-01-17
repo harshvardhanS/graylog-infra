@@ -22,7 +22,7 @@ resource "aws_instance" "Jenkins-server" {
     mongo-db server
 */
 resource "aws_instance" "mongo-es-server" {
-    count = 0
+    count = 3
     ami = "${lookup(var.amis, var.aws_region)}"
     instance_type = "${var.mongo-es-instance-type}"
     #key_name = "${var.keyName}"
