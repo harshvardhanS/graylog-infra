@@ -22,7 +22,7 @@ resource "aws_instance" "Jenkins-server" {
     mongo-db server
 */
 resource "aws_instance" "mongo-es-server" {
-    count = 3
+    count = 0
     ami = "${lookup(var.amis, var.aws_region)}"
     instance_type = "${var.mongo-es-instance-type}"
     #key_name = "${var.keyName}"
@@ -53,7 +53,7 @@ resource "null_resource" "cluster" {
     host = "${aws_instance.Jenkins-server.public_ip}"
   }
     provisioner "file" {
-      source = "/home/hasawat/.ssh/id_rsa"
+      source = "${var.privatekey_path}"
       destination = "/home/ubuntu/.ssh/id_rsa"
       
       connection {
@@ -63,7 +63,7 @@ resource "null_resource" "cluster" {
         }
     }
     provisioner "file" {
-      source      = "/home/hasawat/.ssh/id_rsa.pub"
+      source      = "${var.key_path}"
       destination = "/home/ubuntu/.ssh/id_rsa.pub"
       
       connection {

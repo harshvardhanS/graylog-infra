@@ -24,7 +24,7 @@ variable "jenkins-instance-type" {
   default = "t2.micro"
 }
 variable "graylog-instance-type" {
-  default = "t2.medium"
+  default = "t2.micro"
 }
 variable "key_path" {
   description = "SSH Public Key path"
