@@ -17,7 +17,7 @@ mongodb = {
     "count" = 3
 }
 elastic = {
-    "instance_type" = "t2.micro"
+    "instance_type" = "t2.medium"
     "ami_id" = "ami-0f9cf087c1f27d9b1"
     "count" = 3
 }
