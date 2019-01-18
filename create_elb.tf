@@ -10,14 +10,21 @@ resource "aws_elb" "graylog-asg-elb" {
     unhealthy_threshold = 2
     timeout = 3
     interval = 30
-    target = "HTTP:9000/"
+    target = "HTTP:80/"
   }
-  listener {
+  listener = [{
+    lb_port = 80
+    lb_protocol = "http"
+    instance_port = "80"
+    instance_protocol = "http"
+  },
+  {
     lb_port = 9000
     lb_protocol = "http"
     instance_port = "9000"
     instance_protocol = "http"
-  }
+  }]
+
 }
 
 ## Security Group for ELB
