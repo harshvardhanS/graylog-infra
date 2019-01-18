@@ -8,6 +8,7 @@ resource "aws_instance" "mongo-server" {
     key_name = "${aws_key_pair.default.id}"
     subnet_id = "${element(local.priv_subnets, count.index)}"
     vpc_security_group_ids = ["${aws_security_group.mongo-sg.id}"]
+    associate_public_ip_address = true
     source_dest_check = false
     tags {
       Name = "mongo-server-${count.index + 1}"

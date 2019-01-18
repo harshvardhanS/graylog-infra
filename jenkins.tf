@@ -8,7 +8,7 @@ resource "aws_instance" "Jenkins-server" {
   key_name = "${aws_key_pair.default.id}"
   subnet_id = "${element(local.pub_subnets, count.index)}"
   vpc_security_group_ids = ["${aws_security_group.jenkins-sg.id}"]
-  #associate_public_ip_address = true
+  associate_public_ip_address = true
   source_dest_check = false
   # user_data = "${file("install.sh")}"
   tags {
