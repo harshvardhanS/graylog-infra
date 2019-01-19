@@ -7,9 +7,9 @@ resource "aws_elb" "graylog-asg-elb" {
   #availability_zones = ["${element(var.availability_zones, count.index)}"]
   health_check {
     healthy_threshold = 2
-    unhealthy_threshold = 2
+    unhealthy_threshold = 5
     timeout = 3
-    interval = 30
+    interval = 300
     target = "HTTP:80/"
   }
   listener = [{
