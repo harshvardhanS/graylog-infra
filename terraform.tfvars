@@ -8,7 +8,7 @@ key_path = {
 }
 jenkins = {
     "instance_type" = "t2.micro"
-    "ami_id" = "ami-0506e785eebf38ce8"
+    "ami_id" = "ami-0d681e3b1a1bef3b1"
     "count" = 1  
 }
 mongodb = {
